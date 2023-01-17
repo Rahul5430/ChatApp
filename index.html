@@ -90,12 +90,12 @@
                 `);
 			}
 			function getMessages() {
-				$.get('http://localhost:5000/messages', (data) => {
+				$.get('http://localhost:3000/messages', (data) => {
 					data.forEach(addMessages);
 				});
 			}
 			function sendMessage(message) {
-				$.post('http://localhost:5000/messages', message);
+				$.post('http://localhost:3000/messages', message);
 			}
 		</script>
 	</body>
