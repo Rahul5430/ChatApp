@@ -57,6 +57,16 @@ io.on('connection', (socket) => {
 		});
 	});
 
+	socket.on('typing', async (data) => {
+		const user = await getUser(socket.id);
+
+		try {
+			io.to(user.room).emit('typingResponse', { data });
+		} catch (error) {
+			console.log(error.message);
+		}
+	});
+
 	socket.on('sendMessage', async (message) => {
 		const user = await getUser(socket.id);
 

@@ -13,6 +13,7 @@ const Chat = ({ location }) => {
 	const [users, setUsers] = useState([]);
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState([]);
+	const [typingStatus, setTypingStatus] = useState({});
 
 	const END_POINT = 'http://localhost:3001';
 
@@ -33,12 +34,14 @@ const Chat = ({ location }) => {
 	}, [END_POINT, location.search]);
 
 	useEffect(() => {
+		socket.on('typingResponse', ({ data }) => setTypingStatus(data));
+
 		socket.on('message', (message) => {
 			setMessages((messages) => [...messages, message]);
 		});
 
 		socket.on('roomData', ({ users }) => {
-            console.log(users);
+			// console.log(users);
 			setUsers(users);
 		});
 	}, []);
@@ -48,7 +51,8 @@ const Chat = ({ location }) => {
 		console.log(message);
 
 		if (message) {
-            socket.emit('sendMessage', message);
+			socket.emit('sendMessage', message);
+			socket.emit('typing', { name, status: '' });
 			setMessage('');
 		}
 	};
@@ -64,6 +68,8 @@ const Chat = ({ location }) => {
 					messages={messages}
 					name={name}
 					room={room}
+					typingStatus={typingStatus}
+					socket={socket}
 				/>
 			</div>
 		</div>

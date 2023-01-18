@@ -10,12 +10,36 @@ const RowContent = ({
 	messages,
 	name,
 	room,
+	typingStatus,
+	socket,
 }) => {
+	const handleTyping = (e) => {
+		console.log(message);
+		socket.emit('typing', {
+			status: `${name} is typing...`,
+			name,
+		});
+	};
+
 	return (
 		<div id='row-content-main-container'>
 			<PhoneHeader room={room} />
-			<div id='message-box'>
-				<Messages messages={messages} name={name} />
+			<div
+				id='message-box'
+				style={{
+					paddingBottom:
+						typingStatus.status.length === 0 ||
+						typingStatus.name === name
+							? '0px'
+							: '18px',
+				}}
+			>
+				<Messages
+					messages={messages}
+					name={name}
+					socket={socket}
+					typingStatus={typingStatus}
+				/>
 			</div>
 			<form id='form'>
 				<input
@@ -24,7 +48,9 @@ const RowContent = ({
 					placeholder='Type a message...'
 					onChange={(event) => setMessage(event.target.value)}
 					onKeyPress={(event) =>
-						event.key === 'Enter' ? sendMessage(event) : null
+						event.key === 'Enter'
+							? sendMessage(event)
+							: handleTyping(event)
 					}
 				/>
 				<button onClick={(event) => sendMessage(event)}>

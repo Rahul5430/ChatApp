@@ -5,7 +5,7 @@ const Message = ({ message, name }) => {
 	let isSentByTheCurrentUser = false;
 
 	const trimmedName = name.trim().toLowerCase();
-	console.log(message, name);
+	// console.log(message, name);
 
 	if (message) {
 		if (message.user === trimmedName) {
