@@ -1,12 +1,22 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import './styles/Join.css';
 import './styles/mediaQueries.css';
 
-const Join = () => {
-	const [name, setName] = useState('');
-	const [room, setRoom] = useState('');
+const avatars = [
+	'https://semantic-ui.com/images/avatar2/small/patrick.png',
+	'https://semantic-ui.com/images/avatar2/small/kristy.png',
+	'https://semantic-ui.com/images/avatar2/small/mark.png',
+	'https://semantic-ui.com/images/avatar2/small/matthew.png',
+	'https://semantic-ui.com/images/avatar2/small/elyse.png',
+	'https://semantic-ui.com/images/avatar2/small/lindsay.png',
+];
+
+const Join = ({ logIn }) => {
+	const [username, setUsername] = useState('');
+	const [avatar, setAvatar] = useState(
+		'https://semantic-ui.com/images/avatar2/small/patrick.png'
+	);
 
 	return (
 		<div className='joinOuterContainer'>
@@ -19,34 +29,42 @@ const Join = () => {
 						<input
 							type='text'
 							className='joinInput'
-							onChange={(e) => setName(e.target.value)}
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
 							spellCheck={false}
 							autoCapitalize='words'
 							autoComplete='off'
 							required
 						/>
+						<label>Name</label>
 					</div>
-					<div>
-						<input
-							type='text'
-							className='joinInput'
-							onChange={(e) => setRoom(e.target.value)}
-							spellCheck='false'
-							autoComplete='off'
-							required
-						/>
-						<label>Room</label>
+					<div className='avatar_list'>
+						{avatars.map((avt, idx) => (
+							<div
+								className={
+									avatar === avt
+										? 'avatar active_avatar'
+										: 'avatar'
+								}
+								key={idx}
+							>
+								<img
+									src={avt}
+									className='avatar_image'
+									alt=''
+									onClick={() => setAvatar(avt)}
+								/>
+							</div>
+						))}
 					</div>
-					<Link
-						onClick={(e) =>
-							!name || !room ? e.preventDefault() : null
-						}
-                        to={`/chat?name=${name}&room=${room}`}
+					<button
+						className='button'
+						type='submit'
+						onClick={() => logIn({ username, avatar })}
+						disabled={username.length === 0}
 					>
-						<button className='button' type='submit'>
-							Sign In
-						</button>
-					</Link>
+						Sign In
+					</button>
 				</div>
 			</div>
 		</div>

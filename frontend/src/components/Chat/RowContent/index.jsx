@@ -28,8 +28,8 @@ const RowContent = ({
 				id='message-box'
 				style={{
 					paddingBottom:
-						typingStatus.status.length === 0 ||
-						typingStatus.name === name
+						typingStatus?.status?.length === 0 ||
+						typingStatus?.name === name
 							? '0px'
 							: '18px',
 				}}

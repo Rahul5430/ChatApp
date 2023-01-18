@@ -5,6 +5,7 @@
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
+	justify-content: space-between;
 	-webkit-box-orient: vertical;
 	-webkit-box-direction: normal;
 	-ms-flex-direction: column;
@@ -20,7 +21,8 @@
 
 #row-users-main-container #row-users-header {
 	width: 100%;
-	height: 10%;
+	/* height: 10%; */
+	height: 52px;
 	background-color: rgba(0, 0, 0, 0.192);
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -46,7 +48,8 @@
 
 #row-users-main-container #users {
 	width: 100%;
-	height: 80%;
+	flex: 1;
+	/* height: 80%; */
 }
 
 #row-users-main-container #footer {
@@ -65,7 +68,23 @@
 	background-color: rgba(0, 0, 0, 0.226);
 }
 
-#row-users-main-container #footer #logo-column {
+#row-users-main-container #footer #footer-bottom {
+	-webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.541);
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.541);
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-pack: distribute;
+	justify-content: space-around;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	width: 100%;
+	/* height: 10%; */
+	background-color: rgba(0, 0, 0, 0.226);
+}
+
+#row-users-main-container #footer #footer-bottom #logo-column {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -77,7 +96,7 @@
 	align-items: center;
 }
 
-#row-users-main-container #footer #logo-column h1 {
+#row-users-main-container #footer #footer-bottom #logo-column h1 {
 	padding-top: 0.2em;
 	color: white;
 	padding-left: 0.4em;
@@ -85,12 +104,12 @@
 	font-size: 1.5rem;
 }
 
-#row-users-main-container #footer #logo-column img {
+#row-users-main-container #footer #footer-bottom #logo-column img {
 	-webkit-animation: rotate-logo ease 10s infinite alternate;
 	animation: rotate-logo ease 10s infinite alternate;
 }
 
-#row-users-main-container #footer #leave-column a {
+#row-users-main-container #footer #footer-bottom #leave-column a {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -112,14 +131,154 @@
 	cursor: pointer;
 }
 
-#row-users-main-container #footer #leave-column a img {
+#row-users-main-container #footer #footer-bottom #leave-column a img {
 	width: 1.4rem;
 }
 
-#row-users-main-container #footer #leave-column a h2 {
+#row-users-main-container #footer #footer-bottom #leave-column a h2 {
 	font-weight: 300;
 	font-size: 1.3rem;
 	padding-right: 0.4em;
+}
+
+#row-users-main-container #footer #footer-bottom #new-group div {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	text-decoration: none;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: reverse;
+	-ms-flex-direction: row-reverse;
+	flex-direction: row-reverse;
+	background-color: rgba(0, 189, 0, 0.253);
+	padding: 0.5em 0.8em;
+	border-radius: 0.4rem;
+	color: white;
+	cursor: pointer;
+}
+
+#row-users-main-container #footer #footer-bottom #new-group div img {
+	width: 1.4rem;
+	rotate: -90deg;
+}
+
+#row-users-main-container #footer #footer-bottom #new-group div h2 {
+	font-weight: 300;
+	font-size: 1.3rem;
+	padding-right: 0.4em;
+}
+
+#footer-up {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: start;
+	-ms-flex-align: start;
+	align-items: center;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 50%;
+}
+
+#footer-up div {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	color: white;
+	margin: 0.5rem 0;
+	position: relative;
+	width: 100%;
+	-webkit-transition: ease 0.2s all;
+	transition: ease 0.2s all;
+}
+
+#footer-up div input {
+	outline: none;
+	border: none;
+	background-color: transparent;
+	border: 1.5px solid white;
+	padding: 0.5em;
+	border-radius: 0.3rem;
+	caret-color: white;
+	color: white;
+	-webkit-transition: ease 0.2s all;
+	transition: ease 0.2s all;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-size: 1.2rem;
+	letter-spacing: 0.05em;
+}
+
+#footer-up div input:valid {
+	border: 1.5px solid #01b601;
+	background-color: rgba(0, 122, 0, 0.11);
+}
+
+#footer-up div input:focus {
+	border: 1.5px solid #40c6d4;
+	background-color: rgba(0, 0, 0, 0.11);
+}
+
+#footer-up div label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	-webkit-transition: ease 0.2s all;
+	transition: ease 0.2s all;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	padding-left: 0.7rem;
+	z-index: -7;
+}
+
+#footer-up .button {
+	outline: none;
+	border: none;
+	padding: 0.5em 0.7em;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-size: 1.1rem;
+	margin-bottom: 0.5rem;
+	border-radius: 0.3rem;
+	-webkit-transition: ease 0.15s all;
+	transition: ease 0.15s all;
+}
+
+@media not all and (pointer: coarse) {
+	#footer-up .button:hover {
+		background-color: #537be9;
+		color: white;
+		cursor: pointer;
+	}
+}
+
+#footer-up div input:focus + label {
+	-webkit-transform: translateY(-1.7rem) scale(0.9) translateX(-1.5rem);
+	transform: translateY(-1.7rem) scale(0.9) translateX(-1.5rem);
+}
+
+#footer-up > div > input:valid + label {
+	-webkit-transform: translateY(-1.7rem) scale(0.9) translateX(-1.5rem);
+	transform: translateY(-1.7rem) scale(0.9) translateX(-1.5rem);
 }
 
 @-webkit-keyframes rotate-logo {
