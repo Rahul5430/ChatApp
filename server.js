@@ -290,78 +290,6 @@ io.on('connection', (socket) => {
 		io.sockets.emit('users', users);
 		io.sockets.emit('rooms', rooms);
 	});
-
-	// socket.on('join', (data) => {
-	// 	const { name, room } = data;
-	// 	const { user, error } = addUser({ id: socket.id, name, room });
-
-	// 	if (error) {
-	// 		console.log(error);
-	// 		return;
-	// 	}
-
-	// 	console.log('joined');
-
-	// 	socket.emit('message', {
-	// 		user: 'admin',
-	// 		text: `${user.name}, welcome to the room!`,
-	// 	});
-
-	// 	socket.broadcast.to(user.room).emit('message', {
-	// 		user: 'admin',
-	// 		text: `${user.name} has joined the room.`,
-	// 	});
-
-	// 	socket.join(user.room);
-	// 	console.log(user);
-	// 	// console.log(getUsersAndRooms());
-	// 	// getSockets();
-
-	// 	io.to(user.room).emit('roomData', {
-	// 		room: user.room,
-	// 		users: getUsersInRoom(user.room),
-	// 		rooms: user.rooms,
-	// 	});
-	// });
-
-	// socket.on('typing', async (data) => {
-	// 	const user = await getUser(socket.id);
-
-	// 	try {
-	// 		io.to(user.room).emit('typingResponse', { data });
-	// 	} catch (error) {
-	// 		console.log(error.message);
-	// 	}
-	// });
-
-	// socket.on('sendMessage', async (message) => {
-	// 	const user = await getUser(socket.id);
-
-	// 	try {
-	// 		io.to(user.room).emit('message', {
-	// 			user: user.name,
-	// 			text: message,
-	// 		});
-	// 		io.to(user.room).emit('roomData', {
-	// 			room: user.room,
-	// 			users: getUsersInRoom(user.room),
-	// 		});
-	// 	} catch (err) {
-	// 		console.log(err.message);
-	// 	}
-	// });
-
-	// socket.on('disconnect', () => {
-	// 	const user = removeUser(socket.id);
-	// 	console.log('user disconnected');
-
-	// 	if (user) {
-	// 		io.to(user.room).emit('message', {
-	// 			user: 'admin',
-	// 			text: `${user.name} has just left`,
-	// 		});
-	// 	}
-	// });
 });
 
 mongoose.connect(process.env.DB, (err) => {
@@ -390,11 +318,6 @@ mongoose.connect(process.env.DB, (err) => {
 // 		io.emit('message', req.body);
 // 		res.sendStatus(200);
 // 	});
-// });
-
-// app.get('/', (req, res) => {
-// 	// res.sendFile(index.html);
-// 	res.send('Server is up and running!');
 // });
 
 const server = http.listen(PORT, () => {

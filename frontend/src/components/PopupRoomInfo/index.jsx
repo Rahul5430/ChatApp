@@ -17,9 +17,7 @@ const PopupRoomInfo = ({ roomId, rooms }) => {
 	}, [roomId, rooms]);
 
 	return (
-		<Popup>
-			trigger={<div className='chat_info'>i</div>}
-			style={style}
+		<Popup trigger={<div className='chat_info'>i</div>} style={style}>
 			<p style={{ fontWeight: '600' }}>
 				Users:{' '}
 				<span style={{ color: '#1ecdc5' }}>{members?.length}</span>

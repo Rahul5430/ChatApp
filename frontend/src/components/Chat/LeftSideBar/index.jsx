@@ -21,10 +21,10 @@ const LeftSideBar = ({ user, users, logOut }) => {
 			</span>
 			<div className='active_users_list'>
 				{users?.length > 1 ? (
-					users?.map((u) => {
+					users?.map((u, i) => {
 						if (u.userId !== user.userId) {
 							return (
-								<div className='user_card' key={u.userId}>
+								<div className='user_card' key={`${u.userId}-${i}`}>
 									<img
 										src={u.avatar}
 										className='small_img'

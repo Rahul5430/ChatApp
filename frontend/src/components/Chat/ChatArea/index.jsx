@@ -1,6 +1,6 @@
 import PopupRoomInfo from '../../PopupRoomInfo';
-// import 'emoji-mart/css/emoji-mart.css'
-import Picker from '@emoji-mart/react'
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart';
 
 const ChatArea = ({
 	user,
