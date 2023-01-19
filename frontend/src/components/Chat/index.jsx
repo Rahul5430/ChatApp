@@ -11,9 +11,11 @@ const Chat = ({
 		users,
 		chat,
 		rooms,
+		privateRooms,
 		createRoom,
 		updateRoom,
 		deleteRoom,
+		createPrivateRoom,
 		sendMessage,
 		typing,
 		userTyping,
@@ -99,6 +101,7 @@ const Chat = ({
 							user={user}
 							users={users}
 							logOut={logOut}
+							createPrivateRoom={createPrivateRoom}
 						/>
 						<RightSideBar
 							rooms={rooms}
@@ -132,7 +135,12 @@ const Chat = ({
 				</React.Fragment>
 			) : (
 				<React.Fragment>
-					<LeftSideBar user={user} users={users} logOut={logOut} />
+					<LeftSideBar
+						user={user}
+						users={users}
+						logOut={logOut}
+						createPrivateRoom={createPrivateRoom}
+					/>
 					<ChatArea
 						user={user}
 						rooms={rooms}

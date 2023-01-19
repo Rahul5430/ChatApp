@@ -12,6 +12,7 @@ const useSocket = () => {
 	const [user, setUser] = useState();
 	const [users, setUsers] = useState();
 	const [rooms, setRooms] = useState();
+	const [privateRooms, setPrivateRooms] = useState();
 	const [chat, setChat] = useState({});
 
 	const [userTyping, setUserTyping] = useState();
@@ -56,6 +57,10 @@ const useSocket = () => {
 
 		socket.on('room', (roomId) => {
 			setUser((prevUser) => ({ ...prevUser, roomId: roomId }));
+		});
+
+		socket.on('privateRooms', (pRooms) => {
+			setPrivateRooms(pRooms);
 		});
 
 		socket.on('chat', (message) => {
@@ -130,6 +135,12 @@ const useSocket = () => {
 		socket.emit('deleteRoom', roomId);
 	};
 
+	const createPrivateRoom = (u) => {
+		console.log(u);
+		console.log(user);
+		socket.emit('createPrivateRoom', u.username, user.username);
+	};
+
 	const typing = () => {
 		socket.emit('typing');
 		clearTimeout(typingTimer);
@@ -165,12 +176,14 @@ const useSocket = () => {
 		chat,
 		setChat,
 		rooms,
+		privateRooms,
 		logIn,
 		logOut,
 		sendMessage,
 		createRoom,
 		updateRoom,
 		deleteRoom,
+		createPrivateRoom,
 		typing,
 		stoppedTyping,
 		userTyping,

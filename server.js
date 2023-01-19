@@ -5,6 +5,7 @@ const Message = require('./models/message');
 const router = require('./router');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
+const alert = require('alert');
 
 // const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils');
 
@@ -22,6 +23,7 @@ let rooms = [
 		members: [],
 	},
 ];
+let privateRooms = [];
 
 const app = express();
 const http = require('http').Server(app);
@@ -130,11 +132,37 @@ io.on('connection', (socket) => {
 		io.sockets.emit('rooms', rooms);
 	});
 
+	socket.on('createPrivateRoom', (receiver, sender) => {
+		console.log(
+			`creating private room, receiver: ${receiver}, sender: ${sender}`
+		);
+		const privateRoom = {
+			id: uuidv4(),
+			members: [sender, receiver],
+		};
+		privateRooms.push(privateRoom);
+		socket.join(privateRoom.id);
+		io.sockets.emit('privateRooms', privateRooms);
+	});
+
 	socket.on('updateRoom', (roomId) => {
 		console.log('updating room');
 
 		// if same room then ignore
 		if (socket.roomId === roomId) return;
+
+		// if private room
+		let room = rooms.find((room) => room.id === roomId);
+		let privateRoom = room.private;
+		console.log('private room', privateRoom);
+
+		// if no member of private room then ignore
+		if (privateRoom && room.members.length === 2) {
+			alert(
+				'You cannot join a private room which you are not a member of.'
+			);
+			return;
+		}
 
 		let msg = {};
 
