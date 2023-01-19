@@ -263,7 +263,8 @@ button.enter_chat_btn {
 }
 
 .chat_bg {
-	background-color: #f4f6fb;
+	background-color: rgba(0, 0, 0, 0.192);
+	/* background-color: #f4f6fb; */
 	display: flex;
 	flex-direction: column;
 	flex: 1;
@@ -447,4 +448,138 @@ button:focus {
 	background-color: red;
 	margin: 0;
 	padding: 0;
+}
+
+@media screen and (max-width: 1024px) {
+	.responsive_left_sidebar {
+		display: flex;
+		flex-direction: column;
+		width: 33vw;
+	}
+
+	.left_sidebar {
+		height: 50%;
+	}
+	.right_sidebar {
+		height: 50%;
+	}
+	.chat_area {
+		width: 66vw;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.chat_app {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.responsive_left_sidebar {
+		width: 100%;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	.chat_area {
+		width: 100%;
+	}
+
+	.logo_text h1 {
+		margin-top: 7px;
+	}
+
+	.logo_text {
+		margin-bottom: 0;
+	}
+
+	.profile_info {
+		margin-top: 10px;
+	}
+
+	.left_sidebar {
+		height: auto;
+	}
+	.right_sidebar {
+		height: auto;
+	}
+}
+
+@media screen and (orientation: landscape) and (max-width: 768px) {
+	.chat_app {
+		flex-direction: row;
+		align-items: initial;
+	}
+
+	.responsive_left_sidebar {
+		flex-direction: column;
+		width: 33vw;
+		justify-content: initial;
+	}
+}
+
+@media screen and (orientation: landscape) and (max-width: 920px) {
+	.chat_app {
+		height: auto;
+	}
+	.left_sidebar {
+		height: auto;
+	}
+	.right_sidebar {
+		height: auto;
+	}
+
+	.logo_text h1 {
+		margin-top: 7px;
+	}
+
+	.logo_text {
+		margin-bottom: 0;
+	}
+
+	.profile_info {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.left_sidebar, .right_sidebar {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	.chat_app {
+		height: auto;
+	}
+
+	.chat_area {
+		min-height: 80vh;
+		padding-top: 0px;
+	}
+
+	.responsive_left_sidebar {
+		padding-bottom: 0px;
+	}
+
+	.logo_text h1 {
+		font-size: 1rem;
+	}
+
+	.logo_text {
+		margin-top: 5px;
+	}
+
+	.profile_info {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	.avatar_profile {
+		width: 50px;
+		height: 50px;
+	}
+
+	.room_input input {
+		width: 100%;
+	}
 }

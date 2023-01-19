@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LeftSideBar from './LeftSideBar';
 import ChatArea from './ChatArea';
 import RightSideBar from './RightSideBar';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const Chat = ({
 	client: {
@@ -25,6 +26,8 @@ const Chat = ({
 
 	const chatBottomRef = useRef(null);
 	const emojiSelector = useRef();
+
+	const { height, width } = useWindowDimensions();
 
 	const scrollToBottom = () => {
 		chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -89,35 +92,77 @@ const Chat = ({
 			className='chat_app main-chat-container'
 			onClick={(e) => handleAppClick(e)}
 		>
-			<LeftSideBar user={user} users={users} logOut={logOut} />
-			<ChatArea
-				user={user}
-				rooms={rooms}
-				chat={chat}
-				chatBottomRef={chatBottomRef}
-				userTyping={userTyping}
-				showEmoji={showEmoji}
-				emojiSelector={emojiSelector}
-				handleEmojiKeyUp={handleEmojiKeyUp}
-				addEmoji={addEmoji}
-				setShowEmoji={setShowEmoji}
-				message={message}
-				handleMessageChange={handleMessageChange}
-				handleKeyUp={handleKeyUp}
-				stoppedTyping={stoppedTyping}
-				handleMessageSubmit={handleMessageSubmit}
-			/>
-			<RightSideBar
-				rooms={rooms}
-				user={user}
-				updateRoom={updateRoom}
-				deleteRoom={deleteRoom}
-				chat={chat}
-				roomName={roomName}
-				setRoomName={setRoomName}
-				handleKeyUpRoom={handleKeyUpRoom}
-				createRoom={createRoom}
-			/>
+			{width <= 1024 ? (
+				<React.Fragment>
+					<div className='responsive_left_sidebar'>
+						<LeftSideBar
+							user={user}
+							users={users}
+							logOut={logOut}
+						/>
+						<RightSideBar
+							rooms={rooms}
+							user={user}
+							updateRoom={updateRoom}
+							deleteRoom={deleteRoom}
+							chat={chat}
+							roomName={roomName}
+							setRoomName={setRoomName}
+							handleKeyUpRoom={handleKeyUpRoom}
+							createRoom={createRoom}
+						/>
+					</div>
+					<ChatArea
+						user={user}
+						rooms={rooms}
+						chat={chat}
+						chatBottomRef={chatBottomRef}
+						userTyping={userTyping}
+						showEmoji={showEmoji}
+						emojiSelector={emojiSelector}
+						handleEmojiKeyUp={handleEmojiKeyUp}
+						addEmoji={addEmoji}
+						setShowEmoji={setShowEmoji}
+						message={message}
+						handleMessageChange={handleMessageChange}
+						handleKeyUp={handleKeyUp}
+						stoppedTyping={stoppedTyping}
+						handleMessageSubmit={handleMessageSubmit}
+					/>
+				</React.Fragment>
+			) : (
+				<React.Fragment>
+					<LeftSideBar user={user} users={users} logOut={logOut} />
+					<ChatArea
+						user={user}
+						rooms={rooms}
+						chat={chat}
+						chatBottomRef={chatBottomRef}
+						userTyping={userTyping}
+						showEmoji={showEmoji}
+						emojiSelector={emojiSelector}
+						handleEmojiKeyUp={handleEmojiKeyUp}
+						addEmoji={addEmoji}
+						setShowEmoji={setShowEmoji}
+						message={message}
+						handleMessageChange={handleMessageChange}
+						handleKeyUp={handleKeyUp}
+						stoppedTyping={stoppedTyping}
+						handleMessageSubmit={handleMessageSubmit}
+					/>
+					<RightSideBar
+						rooms={rooms}
+						user={user}
+						updateRoom={updateRoom}
+						deleteRoom={deleteRoom}
+						chat={chat}
+						roomName={roomName}
+						setRoomName={setRoomName}
+						handleKeyUpRoom={handleKeyUpRoom}
+						createRoom={createRoom}
+					/>
+				</React.Fragment>
+			)}
 		</div>
 	);
 };
