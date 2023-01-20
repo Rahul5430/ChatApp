@@ -93,6 +93,7 @@ io.on('connection', (socket) => {
 
 		users.push(user);
 		socket.join(socket.roomId);
+		socket.join(user.userId);
 
 		sessions.set(socket.sessionId, user);
 
@@ -132,17 +133,38 @@ io.on('connection', (socket) => {
 		io.sockets.emit('rooms', rooms);
 	});
 
-	socket.on('createPrivateRoom', (receiver, sender) => {
+	socket.on('createPrivateRoom', async (receiverId, senderId) => {
 		console.log(
-			`creating private room, receiver: ${receiver}, sender: ${sender}`
+			`creating private room, receiver: ${receiverId}, sender: ${senderId}`
 		);
 		const privateRoom = {
-			id: uuidv4(),
-			members: [sender, receiver],
+			id: `${receiverId}@${senderId}`,
+			members: [senderId, receiverId],
 		};
 		privateRooms.push(privateRoom);
 		socket.join(privateRoom.id);
-		io.sockets.emit('privateRooms', privateRooms);
+		console.log(socket.roomId);
+		console.log(privateRoom.id);
+		console.log(socket.rooms);
+		console.log(socket.userId);
+		console.log(socket.username);
+		let uniquePrivateRooms = privateRooms.filter(
+			(privateRoom) => privateRoom.members.indexOf(socket.userId) !== -1
+		);
+		console.log(privateRooms);
+		console.log(uniquePrivateRooms);
+		io.to(receiverId).emit('receiverJoinPrivateRoom', privateRoom.id);
+		io.to(privateRoom.id).emit('privateRooms', uniquePrivateRooms);
+	});
+
+	socket.on('joinPrivateRoom', (privateRoomId) => {
+		console.log(`${socket.username} joining ${privateRoomId}`);
+		socket.join(privateRoomId);
+		let uniquePrivateRooms = privateRooms.filter(
+			(privateRoom) => privateRoom.members.indexOf(socket.userId) !== -1
+		);
+		console.log(socket.userId);
+		socket.emit('privateRooms', uniquePrivateRooms);
 	});
 
 	socket.on('updateRoom', (roomId) => {

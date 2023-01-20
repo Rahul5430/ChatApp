@@ -59,7 +59,14 @@ const useSocket = () => {
 			setUser((prevUser) => ({ ...prevUser, roomId: roomId }));
 		});
 
+		socket.on('receiverJoinPrivateRoom', (privateRoomId) => {
+			socket.emit('joinPrivateRoom', privateRoomId);
+		});
+
 		socket.on('privateRooms', (pRooms) => {
+			console.log(pRooms);
+			console.log(user);
+			console.log(users);
 			setPrivateRooms(pRooms);
 		});
 
@@ -138,7 +145,15 @@ const useSocket = () => {
 	const createPrivateRoom = (u) => {
 		console.log(u);
 		console.log(user);
-		socket.emit('createPrivateRoom', u.username, user.username);
+		socket.emit('createPrivateRoom', u.userId, user.userId);
+	};
+
+	const upatePrivateRoom = (roomId) => {
+		socket.emit('upatePrivateRoom', roomId);
+	};
+
+	const deletePrivateRoom = (roomId) => {
+		socket.emit('deletePrivateRoom', roomId);
 	};
 
 	const typing = () => {
@@ -184,6 +199,8 @@ const useSocket = () => {
 		updateRoom,
 		deleteRoom,
 		createPrivateRoom,
+		upatePrivateRoom,
+		deletePrivateRoom,
 		typing,
 		stoppedTyping,
 		userTyping,

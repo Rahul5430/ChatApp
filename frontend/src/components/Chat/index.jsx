@@ -16,6 +16,8 @@ const Chat = ({
 		updateRoom,
 		deleteRoom,
 		createPrivateRoom,
+		updatePrivateRoom,
+		deletePrivateRoom,
 		sendMessage,
 		typing,
 		userTyping,
@@ -105,9 +107,12 @@ const Chat = ({
 						/>
 						<RightSideBar
 							rooms={rooms}
+							privateRooms={privateRooms}
 							user={user}
 							updateRoom={updateRoom}
 							deleteRoom={deleteRoom}
+							updatePrivateRoom={updatePrivateRoom}
+							deletePrivateRoom={deletePrivateRoom}
 							chat={chat}
 							roomName={roomName}
 							setRoomName={setRoomName}
@@ -118,6 +123,7 @@ const Chat = ({
 					<ChatArea
 						user={user}
 						rooms={rooms}
+						privateRooms={privateRooms}
 						chat={chat}
 						chatBottomRef={chatBottomRef}
 						userTyping={userTyping}
@@ -144,6 +150,7 @@ const Chat = ({
 					<ChatArea
 						user={user}
 						rooms={rooms}
+						privateRooms={privateRooms}
 						chat={chat}
 						chatBottomRef={chatBottomRef}
 						userTyping={userTyping}
@@ -160,9 +167,12 @@ const Chat = ({
 					/>
 					<RightSideBar
 						rooms={rooms}
+						privateRooms={privateRooms}
 						user={user}
 						updateRoom={updateRoom}
 						deleteRoom={deleteRoom}
+						updatePrivateRoom={updatePrivateRoom}
+						deletePrivateRoom={deletePrivateRoom}
 						chat={chat}
 						roomName={roomName}
 						setRoomName={setRoomName}
