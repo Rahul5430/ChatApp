@@ -133,7 +133,19 @@ io.on('connection', (socket) => {
 		io.sockets.emit('rooms', rooms);
 	});
 
-	socket.on('createPrivateRoom', async (receiverId, senderId) => {
+	socket.on('createPrivateRoom', async (receiver, sender) => {
+		let receiverId = receiver.userId;
+		let senderId = sender.userId;
+		if (
+			privateRooms.some(
+				(pRoom) =>
+					pRoom.members.includes(receiverId) &&
+					pRoom.members.includes(senderId)
+			)
+		) {
+			alert('Private room already exists!');
+			return;
+		}
 		console.log(
 			`creating private room, receiver: ${receiverId}, sender: ${senderId}`
 		);
@@ -143,28 +155,19 @@ io.on('connection', (socket) => {
 		};
 		privateRooms.push(privateRoom);
 		socket.join(privateRoom.id);
-		console.log(socket.roomId);
-		console.log(privateRoom.id);
-		console.log(socket.rooms);
-		console.log(socket.userId);
-		console.log(socket.username);
-		let uniquePrivateRooms = privateRooms.filter(
-			(privateRoom) => privateRoom.members.indexOf(socket.userId) !== -1
+		io.to(receiverId).emit(
+			'receiverJoinPrivateRoom',
+			privateRoom.id,
+			sender,
+			privateRoom
 		);
-		console.log(privateRooms);
-		console.log(uniquePrivateRooms);
-		io.to(receiverId).emit('receiverJoinPrivateRoom', privateRoom.id);
-		io.to(privateRoom.id).emit('privateRooms', uniquePrivateRooms);
+		io.to(privateRoom.id).emit('privateRooms', privateRoom, receiver);
 	});
 
-	socket.on('joinPrivateRoom', (privateRoomId) => {
+	socket.on('joinPrivateRoom', (privateRoomId, sender, pRoom) => {
 		console.log(`${socket.username} joining ${privateRoomId}`);
 		socket.join(privateRoomId);
-		let uniquePrivateRooms = privateRooms.filter(
-			(privateRoom) => privateRoom.members.indexOf(socket.userId) !== -1
-		);
-		console.log(socket.userId);
-		socket.emit('privateRooms', uniquePrivateRooms);
+		socket.emit('privateRooms', pRoom, sender);
 	});
 
 	socket.on('updateRoom', (roomId) => {
@@ -172,19 +175,6 @@ io.on('connection', (socket) => {
 
 		// if same room then ignore
 		if (socket.roomId === roomId) return;
-
-		// if private room
-		let room = rooms.find((room) => room.id === roomId);
-		let privateRoom = room.private;
-		console.log('private room', privateRoom);
-
-		// if no member of private room then ignore
-		if (privateRoom && room.members.length === 2) {
-			alert(
-				'You cannot join a private room which you are not a member of.'
-			);
-			return;
-		}
 
 		let msg = {};
 
@@ -285,6 +275,113 @@ io.on('connection', (socket) => {
 		};
 
 		sessions.set(socket.sessionId, user);
+	});
+
+	socket.on('updatePrivateRoom', (roomId) => {
+		console.log('updating private room');
+
+		// if same room then ignore
+		if (socket.roomId === roomId) return;
+
+		let msg = {};
+
+		// broadcast "left room" to all other users of previous room of user
+		msg = {
+			type: 'info',
+			room: socket.roomId,
+			content: socket.username + ' has left room',
+		};
+
+		socket.broadcast.to(socket.roomId).emit('chat', msg);
+
+		// remove username of disconnected user from all rooms member list
+		rooms.map((room) => {
+			if (room.members.includes(socket.username)) {
+				let index = room.members.indexOf(socket.username);
+				if (index !== -1) room.members.splice(index, 1);
+			}
+			return room;
+		});
+
+		// remove rooms created by diconnected user from rooms list if all members left room
+		rooms = rooms.filter((room) => {
+			let u = users.find((user) => user.userId === room.userId);
+			if (room.members.length > 0 || u || room.id === globalRoomId) {
+				return room;
+			}
+		});
+
+		// send new room to client to update local state
+		socket.emit('room', roomId);
+
+		if (socket.rooms.has(roomId)) {
+			// Already member of room. just changing active room
+			socket.roomId = roomId;
+
+			msg = {
+				type: 'info',
+				room: socket.roomId,
+				content: socket.username + ' has entered room',
+			};
+
+			socket.broadcast.to(socket.roomId).emit('chat', msg);
+
+			// store username in new room members list
+			// rooms.map((room) => {
+			// 	if (room.id === socket.roomId) {
+			// 		room.members.push(socket.username);
+			// 	}
+			// 	return room;
+			// });
+
+			// io.sockets.emit('rooms', rooms);
+
+			let user = {
+				userId: socket.userId,
+				username: socket.username,
+				avatar: socket.avatar,
+				roomId: socket.roomId,
+			};
+
+			sessions.set(socket.sessionId, user);
+
+			return;
+		}
+
+		// if (rooms.some((room) => room.id === roomId)) {
+		// 	socket.roomId = roomId;
+		// 	socket.join(roomId);
+		// } else {
+		// 	socket.roomId = globalRoomId;
+		// 	socket.join(globalRoomId);
+		// }
+
+		// // check if there is no duplicate entry of users in same room
+		// rooms.map((room) => {
+		// 	if (room.id === socket.roomId) {
+		// 		room.members.push(socket.username);
+		// 	}
+		// 	return room;
+		// });
+
+		// msg = {
+		// 	type: 'info',
+		// 	room: socket.roomId,
+		// 	content: socket.username + ' has joined room',
+		// };
+
+		// socket.broadcast.to(socket.roomId).emit('chat', msg);
+
+		// io.sockets.emit('rooms', rooms);
+
+		// user = {
+		// 	userId: socket.userId,
+		// 	username: socket.username,
+		// 	avatar: socket.avatar,
+		// 	roomId: socket.roomId,
+		// };
+
+		// sessions.set(socket.sessionId, user);
 	});
 
 	socket.on('deleteRoom', (roomId) => {

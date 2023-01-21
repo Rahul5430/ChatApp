@@ -75,34 +75,36 @@ const RightSideBar = ({
 				Private Rooms
 			</span>
 			<div className='active_rooms_list'>
-				{privateRooms?.map((privateRooms) => (
+				{privateRooms?.map((privateRoom) => (
 					<div
 						className={
-							privateRooms.id === user.roomId
+							privateRoom.id === user.roomId
 								? 'room_card active_item'
 								: 'room_card'
 						}
-						key={privateRooms.id}
-						onClick={() => updatePrivateRoom(privateRooms.id)}
+						key={privateRoom.id}
+						onClick={() => updatePrivateRoom(privateRoom.id)}
 					>
 						<div className='room_item_content'>
 							<img
-								// src={room.avatar}
+								src={privateRoom.avatar}
 								className='small_img'
 								alt=''
 							/>
 							<div className='roomInfo'>
-								{/* <span>{room.name}</span> */}
+								<span>{privateRoom.name}</span>
 								<span className='room_author'>
-									{/* {room.username} */}
+									{privateRoom.username}
 								</span>
 							</div>
 						</div>
 
 						<div className='room_item_controls'>
-							{/* {room.userId === user.userId && (
+							{privateRoom.userId === user.userId && (
 								<div
-									onClick={() => deletePrivateRoom(room.id)}
+									onClick={() =>
+										deletePrivateRoom(privateRoom.id)
+									}
 									style={{ margin: 3 }}
 								>
 									<i
@@ -110,13 +112,13 @@ const RightSideBar = ({
 										style={{ color: 'grey' }}
 									/>
 								</div>
-							)} */}
-							{/* {chat[room.id]?.unread > 0 &&
-								room.id !== user.roomId && (
+							)}
+							{chat[privateRoom.id]?.unread > 0 &&
+								privateRoom.id !== user.roomId && (
 									<div className='badge'>
-										{chat[room.id]?.unread}
+										{chat[privateRoom.id]?.unread}
 									</div>
-								)} */}
+								)}
 						</div>
 					</div>
 				))}

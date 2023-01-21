@@ -12,7 +12,7 @@ const useSocket = () => {
 	const [user, setUser] = useState();
 	const [users, setUsers] = useState();
 	const [rooms, setRooms] = useState();
-	const [privateRooms, setPrivateRooms] = useState();
+	const [privateRooms, setPrivateRooms] = useState([]);
 	const [chat, setChat] = useState({});
 
 	const [userTyping, setUserTyping] = useState();
@@ -59,15 +59,21 @@ const useSocket = () => {
 			setUser((prevUser) => ({ ...prevUser, roomId: roomId }));
 		});
 
-		socket.on('receiverJoinPrivateRoom', (privateRoomId) => {
-			socket.emit('joinPrivateRoom', privateRoomId);
+		socket.on('receiverJoinPrivateRoom', (privateRoomId, sender, privateRoom) => {
+			socket.emit('joinPrivateRoom', privateRoomId, sender, privateRoom);
 		});
 
-		socket.on('privateRooms', (pRooms) => {
-			console.log(pRooms);
-			console.log(user);
-			console.log(users);
-			setPrivateRooms(pRooms);
+		socket.on('privateRooms', (pRoom, user) => {
+			let privateRoom = {
+				id: pRoom.id,
+				name: user.username,
+				userId: user.userId,
+				username: '',
+				avatar: user.avatar,
+				members: pRoom.members,
+			};
+			console.log(privateRoom);
+			setPrivateRooms((prevPrivateRooms) => [...prevPrivateRooms, privateRoom]);
 		});
 
 		socket.on('chat', (message) => {
@@ -145,11 +151,23 @@ const useSocket = () => {
 	const createPrivateRoom = (u) => {
 		console.log(u);
 		console.log(user);
-		socket.emit('createPrivateRoom', u.userId, user.userId);
+		socket.emit('createPrivateRoom', u, user);
 	};
 
-	const upatePrivateRoom = (roomId) => {
-		socket.emit('upatePrivateRoom', roomId);
+	const updatePrivateRoom = (roomId) => {
+		socket.emit('updatePrivateRoom', roomId);
+
+		setChat((prevchat) => ({
+			...prevchat,
+			[user.roomId]: {
+				...prevchat[user.roomId],
+				unread: 0,
+			},
+			[roomId]: {
+				...prevchat[roomId],
+				unread: 0,
+			},
+		}));
 	};
 
 	const deletePrivateRoom = (roomId) => {
@@ -199,7 +217,7 @@ const useSocket = () => {
 		updateRoom,
 		deleteRoom,
 		createPrivateRoom,
-		upatePrivateRoom,
+		updatePrivateRoom,
 		deletePrivateRoom,
 		typing,
 		stoppedTyping,
