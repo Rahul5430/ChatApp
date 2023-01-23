@@ -1,26 +1,14 @@
-// import { BrowserRouter, Switch } from 'react-router-dom';
-import Join from './components/Join';
-import Chat from './components/Chat';
-import useSocket from './hooks/useSocket';
+import { Route } from 'react-router-dom';
 import './App.css';
+import ChatPage from './Pages/ChatPage';
+import HomePage from './Pages/HomePage';
 
 function App() {
-	const client = useSocket();
-
 	return (
-		// <BrowserRouter>
-			// <Switch>
-				// {/* <Route path='/chat' component={Chat} /> */}
-				// {/* <Route exact path='/' component={Join} /> */}
-			// </Switch>
-			<div className='app'>
-				{client.user ? (
-					<Chat client={client} />
-				) : (
-					<Join logIn={client.logIn} />
-				)}
-			</div>
-		// </BrowserRouter>
+		<div className='App'>
+			<Route path='/' component={HomePage} exact />
+			<Route path='/chats' component={ChatPage} />
+		</div>
 	);
 }
 
