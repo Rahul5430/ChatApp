@@ -14,7 +14,7 @@ app.use(express.json()); // to accept json data
 
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/api/messages', messageRoutes);
+app.use('/api/message', messageRoutes);
 
 // --------------------------deployment------------------------------
 
