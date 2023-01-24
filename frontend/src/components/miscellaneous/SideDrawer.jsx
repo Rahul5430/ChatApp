@@ -41,8 +41,8 @@ const SideDrawer = () => {
 	const {
 		setSelectedChat,
 		user,
-		notifications,
-		setNotifications,
+		notification,
+		setNotification,
 		chats,
 		setChats,
 	} = ChatState();
@@ -50,6 +50,8 @@ const SideDrawer = () => {
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const history = useHistory();
+
+	console.log(notification);
 
 	const logoutHandler = () => {
 		localStorage.removeItem('userInfo');
@@ -156,20 +158,20 @@ const SideDrawer = () => {
 					<Menu>
 						<MenuButton p={1}>
 							<NotificationBadge
-								count={notifications.length}
+								count={notification.length}
 								effect={Effect.SCALE}
 							/>
 							<BellIcon fontSize='2xl' m={1} />
 						</MenuButton>
 						<MenuList pl={2}>
-							{!notifications.length && 'No New Messages'}
-							{notifications.map((notif) => (
+							{!notification.length && 'No New Messages'}
+							{notification.map((notif) => (
 								<MenuItem
 									key={notif._id}
 									onClick={() => {
 										setSelectedChat(notif.chat);
-										setNotifications(
-											notifications.filter(
+										setNotification(
+											notification.filter(
 												(n) => n !== notif
 											)
 										);
