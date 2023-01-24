@@ -1,8 +1,11 @@
 import { Button } from '@chakra-ui/button';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/input';
-import { VStack } from '@chakra-ui/layout';
+import { Box, HStack, VStack } from '@chakra-ui/layout';
 import { useToast } from '@chakra-ui/toast';
+import { useRadio, useRadioGroup } from '@chakra-ui/radio';
+import { chakra } from '@chakra-ui/system';
+import { Image } from '@chakra-ui/image';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -17,12 +20,75 @@ const Signup = () => {
 	const [email, setEmail] = useState('');
 	const [confirmpassword, setConfirmpassword] = useState('');
 	const [password, setPassword] = useState('');
-	const [pic, setPic] = useState();
+	const [pic, setPic] = useState('https://semantic-ui.com/images/avatar2/small/patrick.png');
 	const [picLoading, setPicLoading] = useState(false);
+
+	const avatars = [
+		{
+			name: 'Patrick',
+			image: 'https://semantic-ui.com/images/avatar2/small/patrick.png',
+		},
+		{
+			name: 'Kristy',
+			image: 'https://semantic-ui.com/images/avatar2/small/kristy.png',
+		},
+		{
+			name: 'Mark',
+			image: 'https://semantic-ui.com/images/avatar2/small/mark.png',
+		},
+		{
+			name: 'Matthew',
+			image: 'https://semantic-ui.com/images/avatar2/small/matthew.png',
+		},
+		{
+			name: 'Elyse',
+			image: 'https://semantic-ui.com/images/avatar2/small/elyse.png',
+		},
+		{
+			name: 'Lindsay',
+			image: 'https://semantic-ui.com/images/avatar2/small/lindsay.png',
+		},
+	];
+
+	const handleChange = (value) => {
+		setPic(value);
+	};
+
+	const { getRadioProps, getRootProps } = useRadioGroup({
+		name: 'avatar',
+		defaultValue: 'Patrick',
+		onChange: handleChange,
+	});
+
+	const CustomRadio = (props) => {
+		const { image, ...radioProps } = props;
+		const {
+			state,
+			getInputProps,
+			getCheckboxProps,
+			htmlProps,
+			getLabelProps,
+		} = useRadio(radioProps);
+
+		return (
+			<chakra.label {...htmlProps} cursor='pointer'>
+				<input {...getInputProps({})} hidden />
+				<Box
+					{...getCheckboxProps()}
+					bg={state.isChecked ? 'green.200' : 'transparent'}
+					w={14}
+					p={1}
+					rounded='full'
+				>
+					<Image src={image} rounded='full' {...getLabelProps()} />
+				</Box>
+			</chakra.label>
+		);
+	};
 
 	const submitHandler = async () => {
 		setPicLoading(true);
-		if (!name || !email || !password || !confirmpassword) {
+		if (!name || !email || !password || !confirmpassword || !pic) {
 			toast({
 				title: 'Please Fill all the Feilds',
 				status: 'warning',
@@ -102,8 +168,8 @@ const Signup = () => {
 			const data = new FormData();
 			data.append('file', pics);
 			data.append('upload_preset', 'chat-app');
-			data.append('cloud_name', 'piyushproj');
-			fetch('https://api.cloudinary.com/v1_1/piyushproj/image/upload', {
+			data.append('cloud_name', 'rahulsharma');
+			fetch('https://api.cloudinary.com/v1_1/rahulsharma/image/upload', {
 				method: 'post',
 				body: data,
 			})
@@ -177,14 +243,31 @@ const Signup = () => {
 					</InputRightElement>
 				</InputGroup>
 			</FormControl>
-			<FormControl id='pic'>
-				<FormLabel>Upload your Picture</FormLabel>
+			<FormControl id='pic' isRequired>
+				<FormLabel>Upload your Picture or Choose an Avatar</FormLabel>
 				<Input
 					type='file'
 					p={1.5}
 					accept='image/*'
 					onChange={(e) => postDetails(e.target.files[0])}
 				/>
+				<HStack
+					{...getRootProps()}
+					mt='5px'
+					justify={'center'}
+					align='center'
+					wrap='wrap'
+				>
+					{avatars.map((avatar) => {
+						return (
+							<CustomRadio
+								key={avatar.name}
+								image={avatar.image}
+								{...getRadioProps({ value: avatar.image })}
+							/>
+						);
+					})}
+				</HStack>
 			</FormControl>
 			<Button
 				colorScheme='blue'
